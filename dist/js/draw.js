@@ -219,7 +219,7 @@ let utils = {};
     console.log('check canvas alpha');
       if (this.speed.alpha && this.ctx.globalAlpha != this.cur.alpha) {
         this.ctx.globalAlpha = this.cur.alpha;
-        console.log('alpha set to ' + this.ctx.globalAlpha);
+        console.log('**** alpha set to ' + this.ctx.globalAlpha);
       }
   };
   pen.graphic.prototype.animate = async function(timeStamp) {
@@ -244,13 +244,10 @@ let utils = {};
     
     // call this function using bracket syntax.
     this[func]();
-
     
+    this.checkCanvasAlpha();
 
-
-     this.updateProps(); 
-
-     this.checkCanvasAlpha();
+    this.updateProps(); 
 
 
     if (this.delay && !this.started) {
