@@ -70,10 +70,14 @@ let utils = {};
   // this is a specific function for a rectangle.
   pen.graphic.prototype.rectRender = function() {
     this.ctx.fillStyle = this.fill;
-    this.ctx.fillRect(this.pos.x,this.pos.y,this.width,this.height);
+    this.ctx.fillRect(this.cur.x,this.cur.y,this.width,this.height);
   };
   pen.graphic.prototype.reset = function() {
-    this.pos = {...this.origin};
+    this.cur = {...this.origin};
+
+    if (this.cur.alpha || this.cur.alpha == 0) {
+      this.ctx.globalAlpha = this.cur.alpha;
+    }
     this.started = false;
   };
   // let's write a render function that uses the graphic properties to render the
@@ -82,13 +86,13 @@ let utils = {};
     this.ctx.fillStyle = this.color;
     this.ctx.textAlign = this.align;
     this.ctx.font = this.font;
-    this.ctx.fillText(this.text, this.pos.x,this.pos.y)
+    this.ctx.fillText(this.text, this.cur.x,this.cur.y)
   }
   pen.graphic.prototype.circleRender = function() {
   
     this.ctx.beginPath();
     
-    this.ctx.arc(this.pos.x, this.pos.y, this.radius, 0, 2*Math.PI);
+    this.ctx.arc(this.cur.x, this.cur.y, this.radius, 0, 2*Math.PI);
     
     if (this.stroke) { 
          this.ctx.lineWidth = this.lineWidth || 1;
@@ -103,7 +107,7 @@ let utils = {};
   
   pen.graphic.prototype.imageRender = function() {
     const render = () => {
-      this.ctx.drawImage(this.img,this.pos.x,this.pos.y);
+      this.ctx.drawImage(this.img,this.cur.x,this.cur.y);
     };
     if (!this.img) {
       
@@ -137,8 +141,8 @@ let utils = {};
         let innerRadius = this.innerRadius || 50;
     
         // establish the current center point
-		    let cx = this.pos.x || 0;
-        let cy = this.pos.y || 0;
+		    let cx = this.cur.x || 0;
+        let cy = this.cur.y || 0;
        
         // set centerpoint
         this.ctx.lineWidth = this.lineWidth || 1;
@@ -149,7 +153,7 @@ let utils = {};
        
         // write a function called drawLine.
        
-        // move to moves the pen to the start position.
+        // move to moves the pen to the start curition.
         // lineTo keeps the penDown.
         const draw = (radius,angle,action) => { 
            // use cosine to get horizontal coordinate
@@ -187,14 +191,14 @@ let utils = {};
   pen.graphic.prototype.updateProps = function() {
 
 
-    for (prop of this.speed) {
-       if (this.pos[prop] != this.stop[prop]) { 
+    for (prop in this.speed) {
+       if (this.cur[prop] != this.stop[prop]) { 
 
-      if (Math.abs(this.pos[prop] - this.stop[prop]) < this.speed[prop]) {
-          this.pos[prop] = this.stop[prop];
+      if (Math.abs(this.cur[prop] - this.stop[prop]) < this.speed[prop]) {
+          this.cur[prop] = this.stop[prop];
         }
        else {
-          this.pos[prop] += this.speed[prop]
+          this.cur[prop] += this.speed[prop]
        }
 
      }
@@ -207,11 +211,12 @@ let utils = {};
 
     const frameNeeded = () => {
 
-      let stillMoving = this.stop && (this.pos.y != this.stop.y || this.pos.x != this.stop.x);
-
-      let stillFading = this.alpha && this.ctx.globalAlpha != this.alpha.end;
-
-      return  stillMoving || stillFading;
+      for (prop in this.speed) {
+        if (this.stop[prop] != this.cur[prop]) {
+          return true;
+        }
+      }
+      return false;
     }
 
 
@@ -233,7 +238,7 @@ let utils = {};
 
     // start to check if we should repeat.
     // if we are not at the limit yet, call the animation logic.
-    if (frameNeeded) {
+    if (frameNeeded()) {
       // create a reference for this particular graphic.
       let obj = this;
       

@@ -98,7 +98,7 @@ const colors = {
    // delay:500,
     label:"Ice Cream Text",
     type:"text",
-    delay:1500,
+    delay:0,
   });
   
   let logo_circle = new utils.graphic({
