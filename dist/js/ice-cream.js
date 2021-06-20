@@ -12,16 +12,14 @@ const colors = {
 };
 
   let logo_rect = new utils.graphic({
-    origin:{
+    start:{
       x:10,
       y:256
     },
     speed:{
-      x:0,
       y:-2
     },
     stop:{
-      x:this.origin.x,
       y:68
     },
     height:30,
@@ -33,17 +31,15 @@ const colors = {
   });
   
   let flavors = new utils.graphic({
-    origin:{
-      x:-60,
+    start:{
+      x:-70,
       y:160
     },
     speed:{
       x:4,
-      y:0
     },
     stop:{
-      x:70,
-      y:this.origin.y
+      x:70
     },
     font:'bold 24px Bradley Hand',
     color: colors.darkgreen,
@@ -57,7 +53,7 @@ const colors = {
   });
 
    let nevs = new utils.graphic({
-    origin:{
+    start:{
       x:-10,
       y:-10
     },
@@ -79,13 +75,13 @@ const colors = {
     type:"text",
   });
   let ic_text = new utils.graphic({
-    origin:{
+    start:{
       x:70,
       y:90,
       alpha:0,
     },
     speed:{
-      alpha:0.2
+      alpha:0.02
     },
     stop:{
       alpha:1
@@ -98,11 +94,11 @@ const colors = {
    // delay:500,
     label:"Ice Cream Text",
     type:"text",
-    delay:0,
+    delay:1500,
   });
   
   let logo_circle = new utils.graphic({
-    origin:{
+    start:{
       x:70,
       y:-50
     },
@@ -123,8 +119,8 @@ const colors = {
     label:"Nev's Ice Cream Logo Circle",
     type:"circle",
   });
-  let cone = new utils.graphic({
-    origin:{
+  let large_cone = new utils.graphic({
+    start:{
       x:200,
       y:5
     },
@@ -144,8 +140,31 @@ const colors = {
     label:"ice cream cone with three scoops: vanilla, chocolate, pistachio"
   });
 
- // rect1.rectRender();
-  let arr = [logo_rect,logo_circle,flavors,cone,nevs,ic_text];
+  let small_cone = new utils.graphic({
+    
+    start:{
+      x:60,
+      y:101,
+      alpha:0
+    },
+    speed:{
+      alpha:0.02
+    },
+    stop:{
+      alpha:1
+    },
+    zIndex:10,
+    src:'images/small-cone.png',
+    
+    // identifier
+    type:'image',
+    delay:2000,
+    label:"logo cone"
+  });
+
+function init() {
+  // rect1.rectRender();
+  let arr = [logo_rect,logo_circle,flavors,large_cone,nevs,ic_text,small_cone];
 
   for (o of arr) {
     o.animate();
@@ -159,3 +178,5 @@ const colors = {
         o.animate();
       }
   });
+}
+init();

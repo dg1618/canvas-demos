@@ -51,10 +51,7 @@ let utils = {};
      
       
       this.ctx = this.canvas.getContext('2d');
-      if (o.alpha && (o.alpha.start || o.alpha.start === 0)) {
-        this.ctx.globalAlpha = 0; //o.alpha.start;
-      }
-    
+
       // syntactical - to let devs know we are tracking this.
       this.started = false;
       
@@ -73,11 +70,12 @@ let utils = {};
     this.ctx.fillRect(this.cur.x,this.cur.y,this.width,this.height);
   };
   pen.graphic.prototype.reset = function() {
-    this.cur = {...this.origin};
+    this.cur = {...this.start};
 
     if (this.cur.alpha || this.cur.alpha == 0) {
       this.ctx.globalAlpha = this.cur.alpha;
     }
+
     this.started = false;
   };
   // let's write a render function that uses the graphic properties to render the
@@ -107,10 +105,17 @@ let utils = {};
   
   pen.graphic.prototype.imageRender = function() {
     const render = () => {
-      this.ctx.drawImage(this.img,this.cur.x,this.cur.y);
+   //   console.log('image: ' + this.img);
+    //  console.log('this img src: ' + this.img.src);
+      try {
+        this.ctx.drawImage(this.img,this.cur.x,this.cur.y);
+      }
+      catch (e) {
+        console.log('ERROR: image: ' + this.img + ' src: ' + this.img.src + 'e: ' + e);
+      }
+
     };
-    if (!this.img) {
-      
+    if (!this.img || !this.img.src) {
       this.img = new Image();
       this.img.src = this.src;
       this.img.onload = function(){
@@ -197,29 +202,21 @@ let utils = {};
         let diff = Math.abs(this.cur[prop] - this.stop[prop]);
 
       if (diff < this.speed[prop]) {
-         console.log('diff: ' + diff);
+  
           this.cur[prop] = this.stop[prop];
-          if (prop == 'alpha') {
-              console.log('setting ' + prop  + 'to ' + this.stop[prop]);
-              console.log('alpha is now ' + JSON.stringify(this.cur.alpha));
-              this.ctx.globalAlpha = this.cur.alpha;
-              console.log('this context alpha' + this.ctx.globalAlpha);
-              this.imageRender();
-          }
         }
        else {
-          if (prop == 'alpha') { console.log('increasing ' + prop + ' by'+ this.speed[prop]); }
           this.cur[prop] += this.speed[prop]
        }
 
      }
     }
   }
-  pen.graphic.prototype.checkCanvasAlpha = function() {
-    console.log('check canvas alpha');
+pen.graphic.prototype.checkCanvasAlpha = function() {
+   
+ 
       if (this.speed.alpha && this.ctx.globalAlpha != this.cur.alpha) {
         this.ctx.globalAlpha = this.cur.alpha;
-        console.log('**** alpha set to ' + this.ctx.globalAlpha);
       }
   };
   pen.graphic.prototype.animate = async function(timeStamp) {
@@ -231,9 +228,12 @@ let utils = {};
 
       for (prop in this.speed) {
         if (this.stop[prop] != this.cur[prop]) {
+
+       
           return true;
         }
       }
+   
       return false;
     }
 
@@ -243,11 +243,13 @@ let utils = {};
     let func = this.type + 'Render';
     
     // call this function using bracket syntax.
-    this[func]();
+
     
+    this.updateProps(); 
+
     this.checkCanvasAlpha();
 
-    this.updateProps(); 
+    this[func]();
 
 
     if (this.delay && !this.started) {
