@@ -81,12 +81,14 @@ const colors = {
   let ic_text = new utils.graphic({
     origin:{
       x:70,
-      y:90
+      y:90,
+      alpha:0,
     },
-    alpha:{
-     start:0,
-     speed:0.02,
-     end:1
+    speed:{
+      alpha:0.2
+    },
+    stop:{
+      alpha:1
     },
     font:"Bold 22px Arial",
     color: '#fff',

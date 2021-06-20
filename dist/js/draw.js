@@ -203,9 +203,10 @@ let utils = {};
       }
     }
   };*/
-
+  
+  // now there is a chance you may never reach the 
   pen.graphic.prototype.updateCoords = function() {
-    let coords = ['x','y'];
+    let coords = ['x','y','alpha'];
 
     for (c of coords) {
        if (this.pos[c] != this.stop[c]) { 
