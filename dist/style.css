@@ -11,6 +11,7 @@ body{
 }
 canvas {
   position: absolute;
+  background-color:  lightblue;
 }
 button {
   margin-bottom: 5px;
