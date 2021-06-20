@@ -93,7 +93,7 @@ const colors = {
     font:"Bold 22px Arial",
     color: '#fff',
     align:'center',
-    zIndex:3,
+    zIndex:7,
     text:"Ice Cream",
    // delay:500,
     label:"Ice Cream Text",

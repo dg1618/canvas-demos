@@ -182,40 +182,19 @@ let utils = {};
           this.ctx.fill();
        } 
   };
- /* repetitive */
- /* pen.graphic.prototype.updateCoords = function() {
-    if (this.pos.x != this.stop.x) { 
-
-      if (Math.abs(this.pos.x - this.stop.x) < this.speed.x) {
-        this.pos.x = this.stop.x;
-      }
-      else {
-       this.pos.x +=this.speed.x 
-      }
-
-    }
-    if (this.pos.y != this.stop.y) { 
-      if (Math.abs(this.pos.y - this.stopy) < this.speed.y) {
-        this.pos.y = this.stop.y;
-      }
-      else {
-        this.pos.y +=this.speed.y 
-      }
-    }
-  };*/
   
   // now there is a chance you may never reach the 
-  pen.graphic.prototype.updateCoords = function() {
-    let coords = ['x','y','alpha'];
+  pen.graphic.prototype.updateProps = function() {
 
-    for (c of coords) {
-       if (this.pos[c] != this.stop[c]) { 
 
-      if (Math.abs(this.pos[c] - this.stop[c]) < this.speed[c]) {
-          this.pos[c] = this.stop[c];
+    for (prop of this.speed) {
+       if (this.pos[prop] != this.stop[prop]) { 
+
+      if (Math.abs(this.pos[prop] - this.stop[prop]) < this.speed[prop]) {
+          this.pos[prop] = this.stop[prop];
         }
        else {
-          this.pos[c] += this.speed[c]
+          this.pos[prop] += this.speed[prop]
        }
 
      }
@@ -243,12 +222,9 @@ let utils = {};
     // call this function using bracket syntax.
     this[func]();
 
-    if (this.speed) {
-      this.updateCoords(); 
-    }
-    if (this.alpha) {
-      this.ctx.globalAlpha += this.alpha.speed;
-    }
+
+     this.updateProps(); 
+
 
     if (this.delay && !this.started) {
       await sleep(this.delay);
