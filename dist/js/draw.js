@@ -194,16 +194,34 @@ let utils = {};
     for (prop in this.speed) {
        if (this.cur[prop] != this.stop[prop]) { 
 
-      if (Math.abs(this.cur[prop] - this.stop[prop]) < this.speed[prop]) {
+        let diff = Math.abs(this.cur[prop] - this.stop[prop]);
+
+      if (diff < this.speed[prop]) {
+         console.log('diff: ' + diff);
           this.cur[prop] = this.stop[prop];
+          if (prop == 'alpha') {
+              console.log('setting ' + prop  + 'to ' + this.stop[prop]);
+              console.log('alpha is now ' + JSON.stringify(this.cur.alpha));
+              this.ctx.globalAlpha = this.cur.alpha;
+              console.log('this context alpha' + this.ctx.globalAlpha);
+              this.imageRender();
+          }
         }
        else {
+          if (prop == 'alpha') { console.log('increasing ' + prop + ' by'+ this.speed[prop]); }
           this.cur[prop] += this.speed[prop]
        }
 
      }
     }
   }
+  pen.graphic.prototype.checkCanvasAlpha = function() {
+    console.log('check canvas alpha');
+      if (this.speed.alpha && this.ctx.globalAlpha != this.cur.alpha) {
+        this.ctx.globalAlpha = this.cur.alpha;
+        console.log('alpha set to ' + this.ctx.globalAlpha);
+      }
+  };
   pen.graphic.prototype.animate = async function(timeStamp) {
     // clear the playing board.
     
@@ -227,8 +245,12 @@ let utils = {};
     // call this function using bracket syntax.
     this[func]();
 
+    
+
 
      this.updateProps(); 
+
+     this.checkCanvasAlpha();
 
 
     if (this.delay && !this.started) {
