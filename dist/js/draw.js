@@ -16,6 +16,9 @@ greens, etc.
   pen.setStage = function(stageId) {
      stage = document.getElementById(stageId);
   };
+  pen.setBackgroundColor = function(color) {
+    stage.style.backgroundColor = color;
+  }
  
   pen.graphic = function(o={}) {
       

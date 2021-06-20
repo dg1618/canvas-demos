@@ -1,87 +1,134 @@
-utils.setStage('stage');
-  // this is how we want it to work.
-  let rect1 = new utils.graphic({
-    origin:{
-      x:0,
-      y:0
-    },
-    height:200,
-    width:200,
-    zIndex:0,
-    fill:'lightpink',
-    type:'rect',
-    stageId:'stage',
-    label:'background'
-  });
-  
-  let rect2 = new utils.graphic({
+/* ICE CREAM */
 
+utils.setStage('stage');
+
+// ATA
+utils.setBackgroundColor('lightpink');
+
+const colors = {
+  orange:'#ffc44e',
+  green: '#4795a7',
+  darkgreen:'#356f7d',
+};
+
+  let logo_rect = new utils.graphic({
     origin:{
-      x:100,
-      y:5
+      x:10,
+      y:256
     },
     speed:{
-      x:1,
-      y:1
+      x:0,
+      y:-2
     },
     stop:{
-      x:50,
-      y:25
+      x:this.origin.x,
+      y:68
     },
-    height:50,
-    width:25,
-    zIndex:5,
-    fill:'#b8dada',
+    height:30,
+    width:120,
+    zIndex:2,
+    fill:colors.green,
     type:'rect',
-    stageId:'stage'
+    label:"Logo Rectangle",
   });
-   let txt = new utils.graphic({
+  
+  let flavors = new utils.graphic({
     origin:{
-      x:-50,
-      y:190
+      x:-60,
+      y:160
     },
     speed:{
       x:2,
       y:0
     },
     stop:{
-      x:80,
-      y:190
+      x:70,
+      y:this.origin.y
     },
     font:'bold 24px Bradley Hand',
-    color: '#000',
+    color: colors.darkgreen,
     align:'center',
     zIndex:3,
-    text:'42 \rFlavors',
-     
+    text:"42 Flavors!",
+    delay:1000,
+    label:"42 Flavors",
     type:'text',
     stageId:'stage'
   });
-  
-  let circle = new utils.graphic({
+
+   let nevs = new utils.graphic({
     origin:{
-      x:100,
-      y:100
+      x:-10,
+      y:-10
     },
     speed:{
-      x:-0.5,
-      y:-1
+      x:2,
+      y:2
     },
     stop:{
-      x:50,
-      y:5
+      x:70,
+      y:60
     },
-    radius:5,
-    delay:1500,
-    fill:'yellow',
-    stroke:'green',
-    lineWidth:4,
+    font:"30px Brush Script MT",
+    color: colors.darkgreen,
+    align:'center',
+    zIndex:3,
+    text:"Nev's",
+    delay:500,
+    label:"Nev's",
+    type:"text",
+  });
+  let ic_text = new utils.graphic({
+   origin:{
+      x:70,
+      y:90
+    },
+    speed:{
+      x:0,
+      y:0
+    },
+    alpha:{
+     start:0,
+     speed:0.1,
+     end:1
+    },
+    stop:{
+      x:this.origin.x,
+      y:this.origin.y
+    },
+    font:"Bold 22px Arial",
+    color: '#fff',
+    align:'center',
+    zIndex:3,
+    text:"Ice Cream",
+   // delay:500,
+    label:"Ice Cream Text",
+    type:"text",
+  });
+  
+  let logo_circle = new utils.graphic({
+    origin:{
+      x:70,
+      y:-50
+    },
+    speed:{
+      x:0,
+      y:2
+    },
+    stop:{
+      x:70,
+      y:80
+    },
+    radius:50,
+    fill: colors.orange,
+    stroke: colors.green,
+    lineWidth:7,
     
     // type: identifier,
-    type:'circle',
-    stageId:'stage'
+    label:"Nev's Ice Cream Logo Circle",
+    type:"circle",
   });
-  let img = new utils.graphic({
+  let cone = new utils.graphic({
     origin:{
       x:200,
       y:5
@@ -94,17 +141,16 @@ utils.setStage('stage');
       x:140,
       y:5
     },
-    zIndex:10,
+    zIndex:5,
     src:'images/ice-cream.png',
     
     // identifier
     type:'image',
-    stageId:'stage',
-    label:'ice cream'
+    label:"ice cream cone with three scoops: vanilla, chocolate, pistachio"
   });
 
  // rect1.rectRender();
-  let arr = [rect2,circle,txt,img];
+  let arr = [logo_rect,logo_circle,flavors,cone,nevs,ic_text];
 
   for (o of arr) {
     o.animate();
