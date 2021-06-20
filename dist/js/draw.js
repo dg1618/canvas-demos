@@ -1,25 +1,20 @@
 let utils = {};
-/* local ice cream, coffee shop
-get a nice color palette of pinks,
-greens, etc.
-*/
+
 (function(pen) {
 
-  
-  // this is actually a constructor.
-  // show what it traditionally looks like.
-  // we are attaching it to the arg we pass in so we can use it 
-  // outside the constructor.
-  
   let stage = null;
   
   pen.setStage = function(stageId) {
      stage = document.getElementById(stageId);
   };
   pen.setBackgroundColor = function(color) {
-    stage.style.backgroundColor = color;
+     stage.style.backgroundColor = color;
   }
  
+  // this is actually a constructor.
+  // show what it traditionally looks like.
+  // we are attaching it to the arg we pass in so we can use it 
+  // outside the constructor.
   pen.graphic = function(o={}) {
       
       // grab the stage based on the passed-in graphic's stage ID.
@@ -46,6 +41,7 @@ greens, etc.
       if (o.zIndex) {
            this.canvas.style.zIndex = o.zIndex;
       }
+    
       stage.appendChild(this.canvas);
 
     
@@ -55,6 +51,9 @@ greens, etc.
      
       
       this.ctx = this.canvas.getContext('2d');
+      if (o.alpha && (o.alpha.start || o.alpha.start === 0)) {
+        this.ctx.globalAlpha = 0; //o.alpha.start;
+      }
     
       // syntactical - to let devs know we are tracking this.
       this.started = false;
@@ -183,29 +182,81 @@ greens, etc.
           this.ctx.fill();
        } 
   };
-  pen.graphic.prototype.updateCoords = function() {
-    if (this.pos.x != this.stop.x) { this.pos.x +=this.speed.x }
-    if (this.pos.y != this.stop.y) { this.pos.y +=this.speed.y }
-  };
+ /* repetitive */
+ /* pen.graphic.prototype.updateCoords = function() {
+    if (this.pos.x != this.stop.x) { 
 
+      if (Math.abs(this.pos.x - this.stop.x) < this.speed.x) {
+        this.pos.x = this.stop.x;
+      }
+      else {
+       this.pos.x +=this.speed.x 
+      }
+
+    }
+    if (this.pos.y != this.stop.y) { 
+      if (Math.abs(this.pos.y - this.stopy) < this.speed.y) {
+        this.pos.y = this.stop.y;
+      }
+      else {
+        this.pos.y +=this.speed.y 
+      }
+    }
+  };*/
+
+  pen.graphic.prototype.updateCoords = function() {
+    let coords = ['x','y'];
+
+    for (c of coords) {
+       if (this.pos[c] != this.stop[c]) { 
+
+      if (Math.abs(this.pos[c] - this.stop[c]) < this.speed[c]) {
+          this.pos[c] = this.stop[c];
+        }
+       else {
+          this.pos[c] += this.speed[c]
+       }
+
+     }
+    }
+  }
   pen.graphic.prototype.animate = async function(timeStamp) {
     // clear the playing board.
     
+    const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+    const frameNeeded = () => {
+
+      let stillMoving = this.stop && (this.pos.y != this.stop.y || this.pos.x != this.stop.x);
+
+      let stillFading = this.alpha && this.ctx.globalAlpha != this.alpha.end;
+
+      return  stillMoving || stillFading;
+    }
+
 
     this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height);
-    this.updateCoords();  
+
     let func = this.type + 'Render';
     
     // call this function using bracket syntax.
     this[func]();
-    const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-    
+
+    if (this.speed) {
+      this.updateCoords(); 
+    }
+    if (this.alpha) {
+      this.ctx.globalAlpha += this.alpha.speed;
+    }
+
     if (this.delay && !this.started) {
       await sleep(this.delay);
     }
     this.started = true;
+
+    // start to check if we should repeat.
     // if we are not at the limit yet, call the animation logic.
-    if (this.pos.y != this.stop.y || this.pos.x != this.stop.x) {
+    if (frameNeeded) {
       // create a reference for this particular graphic.
       let obj = this;
       

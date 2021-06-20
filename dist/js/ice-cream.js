@@ -38,7 +38,7 @@ const colors = {
       y:160
     },
     speed:{
-      x:2,
+      x:4,
       y:0
     },
     stop:{
@@ -50,7 +50,7 @@ const colors = {
     align:'center',
     zIndex:3,
     text:"42 Flavors!",
-    delay:1000,
+    delay:1500,
     label:"42 Flavors",
     type:'text',
     stageId:'stage'
@@ -79,22 +79,14 @@ const colors = {
     type:"text",
   });
   let ic_text = new utils.graphic({
-   origin:{
+    origin:{
       x:70,
       y:90
     },
-    speed:{
-      x:0,
-      y:0
-    },
     alpha:{
      start:0,
-     speed:0.1,
+     speed:0.02,
      end:1
-    },
-    stop:{
-      x:this.origin.x,
-      y:this.origin.y
     },
     font:"Bold 22px Arial",
     color: '#fff',
@@ -104,6 +96,7 @@ const colors = {
    // delay:500,
     label:"Ice Cream Text",
     type:"text",
+    delay:1500,
   });
   
   let logo_circle = new utils.graphic({
