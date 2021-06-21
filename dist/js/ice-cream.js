@@ -154,7 +154,7 @@ const colors = {
       alpha:1
     },
     zIndex:10,
-    src:'images/small-cone.png',
+    src:'images/cone-small-vert.png',
     
     // identifier
     type:'image',
