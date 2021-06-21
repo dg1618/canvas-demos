@@ -1,3 +1,5 @@
+
+
 let utils = {};
 
 (function(pen) {
@@ -273,3 +275,5 @@ pen.graphic.prototype.checkCanvasAlpha = function() {
   }
 
 })(utils);
+
+// rotation logic: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/rotate

@@ -1,5 +1,10 @@
 /* ICE CREAM */
 
+let demo = {};
+
+(function(pen){
+
+
 utils.setStage('stage');
 
 // ATA
@@ -162,21 +167,22 @@ const colors = {
     label:"logo cone"
   });
 
-function init() {
+  pen.init = function() {
   // rect1.rectRender();
-  let arr = [logo_rect,logo_circle,flavors,large_cone,nevs,ic_text,small_cone];
+    let arr = [logo_rect,logo_circle,flavors,large_cone,nevs,ic_text,small_cone];
 
-  for (o of arr) {
-    o.animate();
-  }
+    for (o of arr) {
+      o.animate();
+    }
 
-  let btn = document.getElementById('restart');
+    let btn = document.getElementById('restart');
   
-  btn.addEventListener('click',function() {
+    btn.addEventListener('click',function() {
       for (o of arr) {
         o.reset();
         o.animate();
       }
-  });
-}
-init();
+    });
+  }
+})(demo)
+demo.init();
