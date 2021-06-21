@@ -25,6 +25,7 @@ let utils = {};
       // first, we create a canvas for each element.
       // each element gets its own layer so that
       // re-rendering won't affect the other element.
+      this.reqIds = [];
       this.canvas = document.createElement('canvas');
       // then, we set the width and height based on the 
       // width of the stage. 
@@ -64,6 +65,26 @@ let utils = {};
       this.reset();
 
   };
+  pen.graphic.prototype.cancelFrames = function(){
+      
+      while (this.reqIds.length > 0) {
+        let reqId = this.reqIds.pop();
+        window.cancelAnimationFrame(reqId);
+      }
+    
+  }
+  pen.graphic.prototype.reset = function() {
+    this.cur = {...this.start};
+
+    if (this.cur.alpha || this.cur.alpha == 0) {
+      this.ctx.globalAlpha = this.cur.alpha;
+    }
+    if (this.reqIds.length > 0) {
+       this.cancelFrames();
+    }
+    this.started = false;
+   
+  };
   // translate the coordinates to the actual canvas.
   // this function would have to vary with shape.
   // this is a specific function for a rectangle.
@@ -71,15 +92,7 @@ let utils = {};
     this.ctx.fillStyle = this.fill;
     this.ctx.fillRect(this.cur.x,this.cur.y,this.width,this.height);
   };
-  pen.graphic.prototype.reset = function() {
-    this.cur = {...this.start};
-
-    if (this.cur.alpha || this.cur.alpha == 0) {
-      this.ctx.globalAlpha = this.cur.alpha;
-    }
-
-    this.started = false;
-  };
+  
   // let's write a render function that uses the graphic properties to render the
   // text.
   pen.graphic.prototype.textRender = function() {
@@ -136,27 +149,23 @@ let utils = {};
   // this assumes that the limit will be hit eventually.
   
   pen.graphic.prototype.starRender = function() {
-      
-        // get context
-        
-     
-        
+    
         // set shape properties
-		    let numPoints = this.numPoints || 5;
+        let numPoints = this.numPoints || 5;
         // set inner and outer radius
-	     	let outerRadius = this.outerRadius || 100;
+        let outerRadius = this.outerRadius || 100;
         let innerRadius = this.innerRadius || 50;
     
         // establish the current center point
-		    let cx = this.cur.x || 0;
+        let cx = this.cur.x || 0;
         let cy = this.cur.y || 0;
        
         // set centerpoint
         this.ctx.lineWidth = this.lineWidth || 1;
         this.ctx.strokeStyle = this.stroke || '#000';
-		    
+        
         // start the path
- 		    this.ctx.beginPath();
+        this.ctx.beginPath();
        
         // write a function called drawLine.
        
@@ -176,14 +185,14 @@ let utils = {};
         
         draw(outerRadius,rotate,'moveTo');
         
- 		    for (var i = 0; i <= numPoints; i++) {
+        for (var i = 0; i <= numPoints; i++) {
           
            let outerAngle = i * angle + rotate;
            let innerAngle = outerAngle + angle/2;
           
            draw(outerRadius,outerAngle,'lineTo');
            draw(innerRadius,innerAngle,'lineTo'); 
-		   }
+       }
        // add the outline
        this.ctx.stroke();
        
@@ -194,7 +203,6 @@ let utils = {};
        } 
   };
   
-  // now there is a chance you may never reach the 
   pen.graphic.prototype.updateProps = function() {
 
 
@@ -270,10 +278,9 @@ pen.graphic.prototype.checkCanvasAlpha = function() {
       let anim = function() {
         obj.animate();
       };
-      window.requestAnimationFrame(anim);
+      let reqId = window.requestAnimationFrame(anim);
+      obj.reqIds.push(reqId);
     }
   }
 
 })(utils);
-
-// rotation logic: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/rotate
