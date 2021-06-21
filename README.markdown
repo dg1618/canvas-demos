@@ -1,5 +1,7 @@
-# Basic HTML5 Canvas Animation with Delay
+# HTML5 Canvas Demo
 
-A Pen created on CodePen.io. Original URL: [https://codepen.io/nevkatz/pen/MWpROPG](https://codepen.io/nevkatz/pen/MWpROPG).
+An animated ice cream add demo with HTML5 Canvas. 
+
+Original URL: [https://codepen.io/nevkatz/pen/MWpROPG](https://codepen.io/nevkatz/pen/MWpROPG).
 
 
