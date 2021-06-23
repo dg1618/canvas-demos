@@ -13,5 +13,19 @@ canvas {
   position: absolute;
 }
 button {
-  margin-bottom: 5px;
+  margin: 5px 0px;
+  color: white;
+  border: 0px;
+  border-bottom: 3px solid #356f7d;
+  background-color: #4795a7;
+  padding: 5px 10px;
+  cursor: pointer;
+  position: relative;
+  transition: 0.2s ease;
+  top: 0px;
+}
+button:active {
+  top: 3px;
+  border-bottom: 0px solid #356f7d;
+  transition: 0.2s ease;
 }

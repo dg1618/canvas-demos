@@ -16,6 +16,10 @@ const colors = {
   darkgreen:'#356f7d',
 };
 
+  const small_cone_src = 'images/cone-small-vert.png';
+  
+  const large_cone_src = 'images/ice-cream.png';
+
   let logo_rect = new utils.graphic({
     start:{
       x:10,
@@ -158,6 +162,7 @@ const colors = {
     stop:{
       alpha:1
     },
+    scale:0.75,
     zIndex:10,
     src:'images/cone-small-vert.png',
     
