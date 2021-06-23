@@ -6,7 +6,7 @@ body{
 #stage {
   position: relative;
   width: 200px;
-  height: 200px;
+  height: 160px;
   border: 1px solid grey;
 }
 canvas {

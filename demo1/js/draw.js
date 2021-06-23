@@ -105,7 +105,13 @@ let utils = {};
 
    pen.graphic.prototype.imageRender = function() {
       const render = () => {
-         this.ctx.drawImage(this.img, this.cur.x, this.cur.y);
+         let params = [this.img, this.cur.x, this.cur.y];
+         if (this.scale) {
+            let w = this.img.width*this.scale;
+            let h = this.img.height*this.scale;
+            params.push(w,h);
+         }
+         this.ctx.drawImage(...params);
       };
       if (!this.img || !this.img.src) {
          this.img = new Image();
@@ -177,16 +183,14 @@ let utils = {};
    pen.graphic.prototype.updateProps = function() {
 
       for (prop in this.speed) {
-         if (this.cur[prop] != this.stop[prop]) {
 
             let diff = Math.abs(this.cur[prop] - this.stop[prop]);
 
-            if (diff < this.speed[prop]) {
+            if (diff <= Math.abs(this.speed[prop])) {
                this.cur[prop] = this.stop[prop];
             } else {
                this.cur[prop] += this.speed[prop]
             }
-         }
       }
    }
    pen.graphic.prototype.checkCanvasAlpha = function() {
